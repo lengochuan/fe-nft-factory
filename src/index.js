@@ -128,8 +128,17 @@ $(document).on("click", "#nft-transfer-exe", function(){
     let _token_id           = $(this).attr("token-id");
     let _account_receiver   = $("#account_receiver").val();
     //Thực hiện chuyển khoản ở đây
-    alert(`Thông tin chuyển khoản đã được thu nhận tiến hành chuyển khoản thôi: ${_token_id} và người nhận ${_account_receiver}`)
+    alert(`Thông tin chuyển khoản đã được thu nhận tiến hành chuyển khoản thôi: ${_token_id} và người nhận ${_account_receiver}`);
+    transferNFT(_account_receiver,_token_id, 1);
 })
+
+const transferNFT = async(_receiver_id, _token_id, _approval_id) => {
+    //_approval_id
+    let res = await contract.nft_token({ receiver_id: _receiver_id, token_id: _token_id, approval_id: _approval_id });
+    console.log("res");
+    console.log(res);
+    return res;
+};
 
 const renderContractNFT = async() => {
 
