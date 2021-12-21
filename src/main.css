@@ -1,0 +1,75 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+body{
+    background-color:#000;
+}
+
+.btn-group {
+    margin: 20px;
+}
+
+.button {
+    margin-left: 20px;
+}
+
+.container {
+    background-color:#f1f1f1;
+}
+
+.content {
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 1000px;
+}
+
+form {
+    margin: 20px;
+    width: 80%;
+}
+
+.card {
+    margin: 10px;
+    width: 320px;
+    height: 650px;
+    align-items: center;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0px !important;
+    margin-bottom: 8px !important;
+}
+
+.card-header {
+    width: 100%;
+    min-height: 560px;
+    border-radius: 5%;
+    padding: 5px;
+    border-radius: 5%;
+    box-shadow: 1px 2px 1px white;
+}
+
+img {
+    border-radius: 5px;
+    width: 100%;
+}
+.nft-hd .card-media{
+    width: 100%;
+}
+.nft-hd{
+    width: 32%;
+    float: left;
+    margin-left: 15px;;
+}
+.hidden{
+    display: none;
+}
