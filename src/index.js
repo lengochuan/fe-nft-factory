@@ -158,7 +158,6 @@ $(document).on("click", "#nft-transfer-exe", function(){
     let _token_id           = $(this).attr("token-id");
     let _account_receiver   = $("#account_receiver").val();
     //Thực hiện chuyển khoản ở đây
-    alert(`Thông tin chuyển khoản đã được thu nhận tiến hành chuyển khoản thôi: ${_token_id} và người nhận ${_account_receiver}`);
     transferNFT(_account_receiver,_token_id, 1);
 })
 
