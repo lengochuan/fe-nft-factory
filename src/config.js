@@ -1,8 +1,8 @@
-const CONTRACT_NAME = 'aution3.lam-test2.testnet'
+const CONTRACT_NAME = 'lam-test3.testnet'
 
 function getConfig(env) {
     switch (env) {
-
+        
         case 'production':
         case 'mainnet':
             return {
