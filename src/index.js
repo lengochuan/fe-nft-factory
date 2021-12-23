@@ -142,11 +142,15 @@ const renderTransfer =  ( _token_id, _media ) => {
                     <div class="card-header">
                         <h3 class="card-title">Chuyển NFT</h3>
                         <p class="transfer-img"><img src="${_media}" /><span class="token-id">NFT ID: ${_token_id}</span></p>
-                        <p class="owner">
+                        <p class="owner text-left">
                             <label>Tài khoản người nhận:</label>
                             <input id="account_receiver" class="form-control" value="" placeholder="Tài khoản sở hữu">
                         </p>
-                        <p class="footer text-right">
+                        <p class="owner text-left">
+                            <label>Nội dung chuyển:</label>
+                            <input id="transfer_note" class="form-control" value="" placeholder="Tặng, cho, thưởng">
+                        </p>
+                        <p class="footer text-right top-10">
                             <button token-id="${_token_id}" id="nft-transfer-cancel" class="btn btn-default transfer-exe">Trở lại </button>
                             <button token-id="${_token_id}" id="nft-transfer-exe" class="btn btn-danger transfer-exe">Xác nhận </button>
                         <p>
@@ -164,23 +168,24 @@ $(document).on("click", "#nft-transfer-cancel", function(){
 $(document).on("click", "#nft-transfer-exe", function(){
     let _token_id           = $(this).attr("token-id");
     let _account_receiver   = $("#account_receiver").val();
+    let _transfer_note      = $("#transfer_note").val();
     if( _account_receiver == '' ){
         alert_friendly("Vui lòng nhập tài khoản nhận NFT!", true);
     }else{
         $(this).prop("disabled", true);
         //Thực hiện chuyển khoản ở đây
-        transferNFT(_account_receiver,_token_id, 1);
+        transferNFT(_account_receiver,_token_id, _transfer_note, 1);
     }
 })
 
-const transferNFT = async (_receiver_id, _token_id, _approval_id) => {
+const transferNFT = async (_receiver_id, _token_id, _transfer_note, _approval_id) => {
     //_approval_id
     try {
         alert_friendly("Đang thực hiện chuyển ...", false);
         let callRes = await contract.nft_transfer({
                 token_id: _token_id,
                 receiver_id: _receiver_id,
-                memo: "transfer ownership"
+                memo: _transfer_note != '' ? _transfer_note:"transfer ownership"
             },
             300000000000000,
             1
