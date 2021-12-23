@@ -19,7 +19,7 @@ $(function(){
         if( !window.accountId )
             login();
         else{
-            alert("Tài khoản đang đăng nhập: "+window.accountId);
+            alert_friendly("Tài khoản đang đăng nhập: "+window.accountId, false);
         }
     })
 
@@ -79,7 +79,7 @@ const renderMyNFT = async() => {
                                 <p class="owner"> Sở hữu bởi: ${nft.owner_id}</p>
                                 <p class="card-description"><i>${nft.metadata.description}</i></p>
                                 <p class="footer text-right">
-                                    <button token-id="${nft.token_id}" id="${`nft-${nft.token_id}`}" class="btn btn-success transfer-btn">Chuyển quyền sở hữu</button></p>
+                                    <button token-id="${nft.token_id}" media="${nft.metadata.media}" id="${`nft-${nft.token_id}`}" class="btn btn-success transfer-btn">Chuyển quyền sở hữu</button></p>
                             </div>
                         </div> 
                     </div>`;
@@ -113,7 +113,7 @@ const renderContractNFTHomePage = async() => {
                                 <p class="card-description">${nft.metadata.description}</p>
                                 <p class="footer text-center">
                                     ${window.accountId == nft.owner_id ? 
-                                                `<button token-id="${nft.token_id}" id="${`nft-${nft.token_id}`}" class="btn btn-success transfer-btn" >Chuyển quyền sở hữu</button>`:
+                                                `<button token-id="${nft.token_id}" media="${nft.metadata.media}" id="${`nft-${nft.token_id}`}" class="btn btn-success transfer-btn" >Chuyển quyền sở hữu</button>`:
                                                 `<button disabled class="btn btn-default">Chuyển quyền sở hữu</button>`}
                                 </p>
                             </div>
@@ -131,7 +131,8 @@ const renderContractNFTHomePage = async() => {
  */
 $(document).on("click", "button.transfer-btn", function(){
     let _token_id = $(this).attr("token-id");
-    let _media = $("#token-media-"+_token_id).attr("src");
+    // let _media = $("#token-media-"+_token_id).attr("src");
+    let _media = $(this).attr("media");
     renderTransfer(_token_id, _media);
 })
 
@@ -146,7 +147,8 @@ const renderTransfer =  ( _token_id, _media ) => {
                             <input id="account_receiver" class="form-control" value="" placeholder="Tài khoản sở hữu">
                         </p>
                         <p class="footer text-right">
-                            <button token-id="${_token_id}" id="nft-transfer-exe" class="btn btn-danger transfer-exe">Xác nhận </button></p>
+                            <button token-id="${_token_id}" id="nft-transfer-cancel" class="btn btn-default transfer-exe">Trở lại </button>
+                            <button token-id="${_token_id}" id="nft-transfer-exe" class="btn btn-danger transfer-exe">Xác nhận </button>
                         <p>
                     </div>
                 </div>`;
@@ -154,17 +156,27 @@ const renderTransfer =  ( _token_id, _media ) => {
     $("#list").html(`<h3 class="header-list">Thông tin chuyển quyền sở hữu</h3>${html}`);
 }
 
+$(document).on("click", "#nft-transfer-cancel", function(){
+    $("#list").html('');
+    renderContractNFTHomePage();
+})
+
 $(document).on("click", "#nft-transfer-exe", function(){
-    $(this).prop("disabled", true);
     let _token_id           = $(this).attr("token-id");
     let _account_receiver   = $("#account_receiver").val();
-    //Thực hiện chuyển khoản ở đây
-    transferNFT(_account_receiver,_token_id, 1);
+    if( _account_receiver == '' ){
+        alert_friendly("Vui lòng nhập tài khoản nhận NFT!", true);
+    }else{
+        $(this).prop("disabled", true);
+        //Thực hiện chuyển khoản ở đây
+        transferNFT(_account_receiver,_token_id, 1);
+    }
 })
 
 const transferNFT = async (_receiver_id, _token_id, _approval_id) => {
     //_approval_id
     try {
+        alert_friendly("Đang thực hiện chuyển ...", false);
         let callRes = await contract.nft_transfer({
                 token_id: _token_id,
                 receiver_id: _receiver_id,
@@ -175,10 +187,11 @@ const transferNFT = async (_receiver_id, _token_id, _approval_id) => {
         );
         console.log(callRes);
         $("#home").click();
-        alert(`Đã chuyển Token ID: ${_token_id} cho tài khoản ${_receiver_id}`);
+        alert_friendly(`Đã chuyển Token ID: ${_token_id} cho tài khoản ${_receiver_id}`, false);
     } catch (err) {
         console.log(err);
         alert(err.kind.ExecutionError);
+        alert_friendly(`Lỗi! ${err.kind.ExecutionError}`, true);
     }
     // return res;
 };
@@ -189,3 +202,18 @@ const transferNFT = async (_receiver_id, _token_id, _approval_id) => {
 setTimeout(function(){
     renderContractNFTHomePage;
 }, 100);
+
+function alert_friendly( _msg, _isError ){
+    $("#msg_show").html(_msg);
+    if(_isError)
+        $("#msg_show").addClass("color-red");
+    else
+        $("#msg_show").addClass("color-green");
+    
+    setTimeout(function(){
+        $("#msg_show").html(_msg);
+        $("#msg_show").removeClass("color-red");
+        $("#msg_show").removeClass("color-green");
+        $("#msg_show").html('');
+    }, 10000);
+}

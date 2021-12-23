@@ -129,13 +129,14 @@ img {
     color: #999;
     font-weight: 300;
     margin-bottom: 25px;
+    font-size: 12px;
 }
 
 .card-header .footer {
     margin-bottom: 20px;
 }
 
-.card-header .footer button {
+/* .card-header .footer button {
     background: #28a745;
     border: 1px solid #28a745;
     border-radius: 3px;
@@ -143,7 +144,7 @@ img {
     color: #fff;
     padding: 6px 10px;
     font-size: 13px;
-}
+} */
 
 .nft-hd {
     width: 33.33333%;
@@ -188,4 +189,19 @@ img {
 .transfer-img span.token-id{
     display: inline;
     position: relative;
+}
+.color-red{
+    color: red;
+    background: #e87f6c;
+}
+.color-green{
+    color: green;
+    background: #86f9a7;
+}
+span#msg_show {
+    padding: 6px;
+    width: 50%;
+    border-radius: 4px;
+    margin: 20px;
+    opacity: 0.66;
 }
