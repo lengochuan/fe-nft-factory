@@ -23,6 +23,15 @@ $(function(){
         }
     })
 
+    $("#signout").click(function(){
+        if( window.accountId && window.accountId != '' ){
+            logout();
+            setTimeout(() => {
+                renderContractNFTHomePage();
+            }, 10);
+        }
+    })
+
 })
 
 // Display the signed-out-flow container
@@ -37,9 +46,7 @@ function signedOutFlow() {
 
 // Displaying the signed in flow container and fill in account-specific data
 function signedInFlow() {
-    document.querySelector("#signin").innerText = window.accountId;
-    document.querySelector("#signout").onclick = logout;
-    document.querySelector("#signin").onclick = () => {};
+    $("#signin").html(window.accountId);
     setTimeout(() => {
         renderContractNFTHomePage();
     }, 10);
@@ -62,10 +69,10 @@ const renderMyNFT = async() => {
     $("#my_nft").removeClass("btn-primary");
     $("#my_nft").addClass("btn-success");
 
-    const totalSupply = parseInt(await contract.nft_supply_for_owner({ account_id: window.accountId}));
+    const totalSupply = parseInt(await contract.nft_supply_for_owner({ account_id: window.accountId}));//count total NFT the owner have
     let limit = totalSupply > 30 ? 30 : totalSupply;
-    let nfts = await contract.nft_tokens_for_owner({ account_id: window.accountId, from_index: "0", limit: limit });
-    document.querySelector("#list").innerHTML = "<p>NFT của bạn load tại đây</p>";
+    let nfts = await contract.nft_tokens_for_owner({ account_id: window.accountId, from_index: "0", limit: limit });//load NFT'owner
+    $("#list").html("<p>NFT của bạn load tại đây</p>");
     let html = '';
 
     if( nfts.length > 0 ){
@@ -86,7 +93,7 @@ const renderMyNFT = async() => {
         });
     }
 
-    document.querySelector("#list").innerHTML = `<h3 class="header-list">DANH SÁCH NFT CỦA TÔI</h3>${html}`;
+    $("#list").html(`<h3 class="header-list">DANH SÁCH NFT CỦA TÔI</h3>${html}`);
 };
 
 const renderContractNFTHomePage = async() => {
@@ -96,10 +103,10 @@ const renderContractNFTHomePage = async() => {
     $("#home").removeClass("btn-primary");
     $("#home").addClass("btn-success");
 
-    const totalSupply = parseInt(await contract.nft_total_supply());
+    const totalSupply = parseInt(await contract.nft_total_supply());//count total Contract NFT
     let limit = totalSupply > 30 ? 30 : totalSupply;
-    let nfts = await contract.nft_tokens({ from_index: "0", limit: limit });
-    document.querySelector("#list").innerHTML = "<p>TRONG KHO KHÔNG CÓ CONTRACT NÀO!</p>";
+    let nfts = await contract.nft_tokens({ from_index: "0", limit: limit });//list NFT'contract
+    $("#list").html("<p>TRONG KHO KHÔNG CÓ CONTRACT NÀO!</p>");
     let html = '';
     
     if( nfts.length > 0 ){
@@ -122,7 +129,7 @@ const renderContractNFTHomePage = async() => {
         });
     }
 
-    document.querySelector("#list").innerHTML = `<h3 class="header-list">DANH SÁCH TRONG KHO NFT-FACTORY</h3>${html}`;
+    $("#list").html(`<h3 class="header-list">DANH SÁCH TRONG KHO NFT-FACTORY</h3>${html}`);
 
 };
 
