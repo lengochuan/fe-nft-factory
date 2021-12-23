@@ -63,7 +63,7 @@ const renderMyNFT = async() => {
     $("#my_nft").addClass("btn-success");
 
     const totalSupply = parseInt(await contract.nft_supply_for_owner({ account_id: window.accountId}));
-    let limit = totalSupply > 6 ? 6 : totalSupply;
+    let limit = totalSupply > 30 ? 30 : totalSupply;
     let nfts = await contract.nft_tokens_for_owner({ account_id: window.accountId, from_index: "0", limit: limit });
     document.querySelector("#list").innerHTML = "<p>NFT của bạn load tại đây</p>";
     let html = '';
@@ -97,7 +97,7 @@ const renderContractNFTHomePage = async() => {
     $("#home").addClass("btn-success");
 
     const totalSupply = parseInt(await contract.nft_total_supply());
-    let limit = totalSupply > 10 ? 10 : totalSupply;
+    let limit = totalSupply > 30 ? 30 : totalSupply;
     let nfts = await contract.nft_tokens({ from_index: "0", limit: limit });
     document.querySelector("#list").innerHTML = "<p>TRONG KHO KHÔNG CÓ CONTRACT NÀO!</p>";
     let html = '';
@@ -155,6 +155,7 @@ const renderTransfer =  ( _token_id, _media ) => {
 }
 
 $(document).on("click", "#nft-transfer-exe", function(){
+    $(this).prop("disabled", true);
     let _token_id           = $(this).attr("token-id");
     let _account_receiver   = $("#account_receiver").val();
     //Thực hiện chuyển khoản ở đây
@@ -173,8 +174,11 @@ const transferNFT = async (_receiver_id, _token_id, _approval_id) => {
             1
         );
         console.log(callRes);
+        $("#home").click();
+        alert(`Đã chuyển Token ID: ${_token_id} cho tài khoản ${_receiver_id}`);
     } catch (err) {
         console.log(err);
+        alert(err.kind.ExecutionError);
     }
     // return res;
 };

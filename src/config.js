@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'lam-test3.testnet'
+const CONTRACT_NAME = 'nft-factory-team.testnet'
 
 function getConfig(env) {
     switch (env) {
